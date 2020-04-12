@@ -29,6 +29,8 @@ public class BootStrapData implements CommandLineRunner {
         sameera.getBooks().add(killingAnimals);
         killingAnimals.getAuthors().add(sameera);
         Publisher publisher = new Publisher("Sanjay Dutt", "plot number 123", "kanpur", "UP", "209098");
+        publisher.getBooks().add(killingAnimals);
+        killingAnimals.setPublisher(publisher);
 
         bookRepository.save(killingAnimals);
         authorRepository.save(sameera);
@@ -37,6 +39,7 @@ public class BootStrapData implements CommandLineRunner {
         System.out.println("Started in bootstrap");
         System.out.println("Number of books " + bookRepository.count());
         System.out.println("Number of publishers " + publisherRepository.count());
+        System.out.println("Publisher number of books " + publisher.getBooks().size());
 
     }
 }
