@@ -17,8 +17,7 @@ public class Publisher {
     private String state;
     private String zip;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "publisher_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="publisher")
     private Set<Book> books = new HashSet<>();
 
     public Publisher() {
@@ -34,10 +33,6 @@ public class Publisher {
 
     public Set<Book> getBooks() {
         return books;
-    }
-
-    public void setBooks(Set<Book> books) {
-        this.books = books;
     }
 
     public String getName() {
@@ -103,5 +98,25 @@ public class Publisher {
                 ", state='" + state + '\'' +
                 ", zip='" + zip + '\'' +
                 '}';
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void addBook(Book book) {
+        if (books.contains(book)) {
+            return;
+        }
+        books.add(book);
+        book.setPublisher(this);
+    }
+
+    public void removeBook(Book book) {
+        if (!books.contains(book)) {
+            return;
+        }
+        books.remove(book);
+        book.setPublisher(null);
     }
 }

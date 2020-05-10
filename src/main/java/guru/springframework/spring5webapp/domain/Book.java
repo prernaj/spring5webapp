@@ -15,7 +15,8 @@ public class Book {
     private String title;
     private String isbn;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -37,7 +38,21 @@ public class Book {
     }
 
     public void setPublisher(Publisher publisher) {
+        if (safeAsFormer(publisher)) {
+            return;
+        }
+        Publisher oldPublisher = this.publisher;
         this.publisher = publisher;
+        if (oldPublisher != null) {
+            oldPublisher.removeBook(this);
+        }
+        if (publisher != null) {
+            publisher.addBook(this);
+        }
+    }
+
+    private boolean safeAsFormer(Publisher newPublisher) {
+        return publisher == null ? newPublisher == null : publisher.equals(newPublisher);
     }
 
     public Long getId() {
@@ -78,7 +93,6 @@ public class Book {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", isbn='" + isbn + '\'' +
-                ", authors=" + authors +
                 '}';
     }
 

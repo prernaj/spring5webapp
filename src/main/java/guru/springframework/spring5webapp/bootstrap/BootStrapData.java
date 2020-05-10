@@ -24,22 +24,39 @@ public class BootStrapData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Author sameera = new Author("Sameera", "Reddy");
-        Book killingAnimals = new Book("Killing animals", "12321");
-        sameera.getBooks().add(killingAnimals);
-        killingAnimals.getAuthors().add(sameera);
-        Publisher publisher = new Publisher("Sanjay Dutt", "plot number 123", "kanpur", "UP", "209098");
-        publisher.getBooks().add(killingAnimals);
-        killingAnimals.setPublisher(publisher);
+        try {
+            Author sameera = new Author("Sameera", "Reddy");
+            Book killingAnimals = new Book("Killing animals", "12321");
+            Book savingEarth = new Book("saving earth", "13242");
+            Publisher publisher = new Publisher("Sanjay Dutt", "plot number 123", "kanpur", "UP", "209098");
+            sameera.getBooks().add(killingAnimals);
+            sameera.getBooks().add(savingEarth);
 
-        bookRepository.save(killingAnimals);
-        authorRepository.save(sameera);
-        publisherRepository.save(publisher);
+            publisher.getBooks().add(killingAnimals);
+            publisher.getBooks().add(savingEarth);
 
-        System.out.println("Started in bootstrap");
-        System.out.println("Number of books " + bookRepository.count());
-        System.out.println("Number of publishers " + publisherRepository.count());
-        System.out.println("Publisher number of books " + publisher.getBooks().size());
+            killingAnimals.getAuthors().add(sameera);
+            killingAnimals.setPublisher(publisher);
+
+            savingEarth.getAuthors().add(sameera);
+            savingEarth.setPublisher(publisher);
+
+
+            publisherRepository.save(publisher);
+            System.out.println("checkpoint 1");
+            authorRepository.save(sameera);
+            System.out.println("checkpoint 2");
+            bookRepository.save(killingAnimals);
+            System.out.println("checkpoint 3");
+            //bookRepository.save(savingEarth);
+
+            System.out.println("Started in bootstrap");
+            System.out.println("Number of books " + bookRepository.count());
+            System.out.println("Number of publishers " + publisherRepository.count());
+            System.out.println("Publisher number of books " + publisher.getBooks().size());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
     }
 }
